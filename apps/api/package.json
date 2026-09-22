@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc -p ../../packages/shared/tsconfig.json && tsc -p tsconfig.json",
+    "prebuild": "tsc -p ../../packages/shared/tsconfig.json",
+    "build": "tsc -p tsconfig.json",
     "start": "tsx src/server.ts",
     "test": "vitest run",
     "test:watch": "vitest",
