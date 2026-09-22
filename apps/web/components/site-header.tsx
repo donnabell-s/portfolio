@@ -11,8 +11,9 @@ const NAV_LINKS = [
 
 export function SiteHeader() {
   // Defaults to Home while the router is still resolving the initial
-  // pathname on first mount, so Home reads as selected immediately.
-  const pathname = usePathname() ?? '/';
+  // pathname (covers both null/undefined and an empty-string result),
+  // so Home reads as selected immediately.
+  const pathname = usePathname() || '/';
 
   return (
     <header className="flex justify-center py-6">
