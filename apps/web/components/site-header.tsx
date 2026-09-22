@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -10,10 +11,15 @@ const NAV_LINKS = [
 ];
 
 export function SiteHeader() {
-  // Defaults to Home while the router is still resolving the initial
-  // pathname (covers both null/undefined and an empty-string result),
-  // so Home reads as selected immediately.
-  const pathname = usePathname() || '/';
+  const routerPathname = usePathname();
+  // Statically cached/regenerated HTML can serve this before the client
+  // router has resolved a pathname, so Home is the default until mount —
+  // it then switches to the router's live value, which is always correct
+  // in the browser.
+  const [mounted, setMounted] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional isMounted flag to bridge SSR/hydration
+  useEffect(() => setMounted(true), []);
+  const pathname = mounted ? routerPathname || '/' : '/';
 
   return (
     <header className="flex justify-center py-6">
