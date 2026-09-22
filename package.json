@@ -1,0 +1,27 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev --workspace=apps/api\" \"npm run dev --workspace=apps/web\"",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "build": "npm run build --workspace=apps/web && npm run build --workspace=apps/api",
+    "lint": "npm run lint --workspace=apps/web && npm run lint --workspace=apps/api",
+    "test": "npm run test --workspace=apps/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "allowScripts": {
+    "argon2@0.41.1": true,
+    "unrs-resolver@1.12.2": true,
+    "esbuild@0.25.12": true
+  }
+}
