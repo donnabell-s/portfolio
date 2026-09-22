@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800">
+  <rect width="1280" height="800" fill="#171717"/>
+  <text x="50%" y="46%" fill="#ededed" font-family="system-ui, sans-serif" font-size="44" font-weight="600" text-anchor="middle" dominant-baseline="middle">
+    This Portfolio
+  </text>
+  <text x="50%" y="56%" fill="#a3a3a3" font-family="system-ui, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle">
+    Placeholder cover — swap for a real screenshot
+  </text>
+</svg>
