@@ -15,7 +15,7 @@ export default async function ProjectsPage() {
 
   return (
     <Container className="py-16">
-      <h1 className="mb-10 text-3xl font-bold tracking-tight">Projects</h1>
+      <h1 className="mb-8 text-4xl font-bold tracking-tight">Projects</h1>
 
       {projects.length === 0 ? (
         <p className="text-foreground/60">No published projects yet — check back soon.</p>

@@ -5,9 +5,9 @@ const EMAIL = 'donnasembrano03@gmail.com';
 
 export function SiteFooter() {
   return (
-    <footer id="contact" className="mt-24 border-t border-black/10 dark:border-white/10">
+    <footer id="contact" className="mt-16 border-t border-black/10 dark:border-white/10">
       <Container className="py-12">
-        <h2 className="mb-4 text-lg font-semibold">Contact</h2>
+        <h2 className="mb-4 text-xl font-semibold">Contact</h2>
         <div className="space-y-2 text-sm text-foreground/70">
           <a
             href={`tel:${PHONE.replace(/\s+/g, '')}`}

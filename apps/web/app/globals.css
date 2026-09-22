@@ -5,6 +5,7 @@
   --foreground: #171717;
   --accent: #4f46e5;
   --accent-foreground: #ffffff;
+  --underline-accent: #4d33c3;
 }
 
 @theme inline {
@@ -22,6 +23,10 @@
     --foreground: #ededed;
     --accent: #6366f1;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {

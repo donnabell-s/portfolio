@@ -42,7 +42,10 @@ export default async function ProjectDetailPage({ params }: PageProps<'/projects
   return (
     <article className="py-16">
       <Container>
-        <Link href="/projects" className="text-sm text-foreground/60 hover:text-foreground">
+        <Link
+          href="/projects"
+          className="text-sm font-medium text-[var(--underline-accent)] hover:opacity-80"
+        >
           &larr; All projects
         </Link>
 
@@ -52,7 +55,7 @@ export default async function ProjectDetailPage({ params }: PageProps<'/projects
             <span aria-hidden="true">&middot;</span>
             <span>{project.role}</span>
           </div>
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{project.title}</h1>
+          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">{project.title}</h1>
           <p className="mt-4 max-w-2xl text-lg text-foreground/70">{project.summary}</p>
 
           <div className="mt-6 flex flex-wrap gap-2">

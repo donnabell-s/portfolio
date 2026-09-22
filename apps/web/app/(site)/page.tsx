@@ -20,23 +20,23 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="py-12 sm:py-20">
-        <Container className="grid items-center gap-12 sm:grid-cols-2">
+      <section className="py-8 sm:py-14">
+        <Container className="grid items-center gap-8 sm:grid-cols-2">
           <div>
-            <p className="mb-2 text-lg text-foreground/70">Hello I&apos;m</p>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            <p className="mb-1 text-lg text-foreground/70">Hello I&apos;m</p>
+            <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
               <span className="text-accent">Donna</span> Sembrano
             </h1>
-            <p className="mt-3 text-xl font-bold tracking-tight">FULL-STACK &amp; AI/ML</p>
-            <p className="mt-4 max-w-md text-foreground/70">
+            <p className="mt-2 text-2xl font-bold tracking-tight">FULL-STACK &amp; AI/ML</p>
+            <p className="mt-3 max-w-md text-foreground/70">
               Computer Science graduate building full-stack and AI-powered applications, from web
               platforms to machine learning pipelines.
             </p>
-            <p className="mt-5 flex items-center gap-2 text-sm text-foreground/70">
+            <p className="mt-4 flex items-center gap-2 text-sm text-foreground/70">
               <PinIcon />
               Cebu, Philippines &bull; Available to WFH
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-6 flex flex-wrap gap-4">
               <Link
                 href="/projects"
                 className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
@@ -56,18 +56,25 @@ export default async function HomePage() {
       </section>
 
       {highlighted.length > 0 && (
-        <section className="border-t border-black/10 py-16 dark:border-white/10">
+        <section className="border-t border-black/10 py-10 sm:py-12 dark:border-white/10">
           <Container>
-            <h2 className="mb-8 text-center text-lg font-semibold tracking-wide uppercase">
-              Featured works
-            </h2>
+            <div className="mb-6 text-center">
+              <h2 className="text-xl font-semibold tracking-wide uppercase">Featured works</h2>
+              <span
+                aria-hidden="true"
+                className="mx-auto mt-2 block h-[3px] w-14 rounded-full bg-[var(--underline-accent)]"
+              />
+            </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {highlighted.map((project) => (
                 <ProjectCard key={project.id} project={project} />
               ))}
             </div>
-            <div className="mt-6 text-right">
-              <Link href="/projects" className="text-sm text-foreground/60 hover:text-foreground">
+            <div className="mt-4 text-right">
+              <Link
+                href="/projects"
+                className="text-sm font-medium text-[var(--underline-accent)] hover:opacity-80"
+              >
                 All projects &rarr;
               </Link>
             </div>
@@ -76,11 +83,15 @@ export default async function HomePage() {
       )}
 
       {gallery.length > 0 && (
-        <section className="border-t border-black/10 py-16 dark:border-white/10">
+        <section className="border-t border-black/10 py-10 sm:py-12 dark:border-white/10">
           <Container>
-            <h2 className="mb-8 text-center text-lg font-semibold tracking-wide uppercase">
-              Gallery
-            </h2>
+            <div className="mb-6 text-center">
+              <h2 className="text-xl font-semibold tracking-wide uppercase">Gallery</h2>
+              <span
+                aria-hidden="true"
+                className="mx-auto mt-2 block h-[3px] w-14 rounded-full bg-[var(--underline-accent)]"
+              />
+            </div>
             <GalleryCarousel images={gallery} />
           </Container>
         </section>

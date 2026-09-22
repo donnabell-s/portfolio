@@ -55,19 +55,39 @@ export function GalleryCarousel({ images }: { images: GalleryImage[] }) {
       </div>
 
       {images.length > 1 && (
-        <div className="mt-4 flex justify-center gap-2">
-          {images.map((image, i) => (
-            <button
-              key={image.id}
-              type="button"
-              aria-label={`Go to image ${i + 1}`}
-              aria-current={i === active}
-              onClick={() => goTo(i)}
-              className={`h-2 w-2 rounded-full transition-colors ${
-                i === active ? 'bg-accent' : 'bg-black/15 dark:bg-white/20'
-              }`}
-            />
-          ))}
+        <div className="mt-4 flex items-center justify-center gap-4">
+          <button
+            type="button"
+            aria-label="Previous image"
+            disabled={active === 0}
+            onClick={() => goTo(Math.max(active - 1, 0))}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-black/15 text-sm disabled:opacity-30 dark:border-white/20"
+          >
+            &lsaquo;
+          </button>
+          <div className="flex gap-2">
+            {images.map((image, i) => (
+              <button
+                key={image.id}
+                type="button"
+                aria-label={`Go to image ${i + 1}`}
+                aria-current={i === active}
+                onClick={() => goTo(i)}
+                className={`h-2 w-2 rounded-full transition-colors ${
+                  i === active ? 'bg-accent' : 'bg-black/15 dark:bg-white/20'
+                }`}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            aria-label="Next image"
+            disabled={active === images.length - 1}
+            onClick={() => goTo(Math.min(active + 1, images.length - 1))}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-black/15 text-sm disabled:opacity-30 dark:border-white/20"
+          >
+            &rsaquo;
+          </button>
         </div>
       )}
     </div>

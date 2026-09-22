@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <Container className="py-16">
-      <div className="grid items-center gap-12 sm:grid-cols-[1.2fr_1fr]">
+      <div className="grid items-start gap-12 sm:grid-cols-[1.2fr_1fr]">
         <div>
-          <h1 className="mb-6 text-3xl font-bold tracking-tight">About</h1>
+          <h1 className="mb-8 text-4xl font-bold tracking-tight">About</h1>
           <div className="max-w-xl space-y-4 text-foreground/80">
             <p>
               I&apos;m Donna Elizabeth Sembrano, a Computer Science graduate from the University
