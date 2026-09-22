@@ -34,3 +34,6 @@ Thumbs.db
 
 # drizzle
 apps/api/drizzle/meta/
+
+.vercel
+.env*

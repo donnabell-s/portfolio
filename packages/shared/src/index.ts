@@ -1,3 +1,3 @@
-export * from './schemas/project';
-export * from './schemas/contact';
-export * from './schemas/auth';
+export * from './schemas/project.js';
+export * from './schemas/contact.js';
+export * from './schemas/auth.js';
