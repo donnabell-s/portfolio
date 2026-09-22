@@ -19,7 +19,7 @@ export function ProjectCard({ project }: { project: Project }) {
         />
       </div>
       <div className="p-5">
-        <div className="mb-1 flex items-center justify-between gap-2">
+        <div className="mb-1 flex items-start justify-between gap-2">
           <h3 className="font-semibold">{project.title}</h3>
           <span className="text-xs text-foreground/50">{project.year}</span>
         </div>

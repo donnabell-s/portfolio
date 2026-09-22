@@ -2,6 +2,7 @@ import { Container } from './container';
 
 const PHONE = '+63 929 195 5342';
 const EMAIL = 'donnasembrano03@gmail.com';
+const LINKEDIN = 'https://www.linkedin.com/in/donna-sembrano/';
 
 export function SiteFooter() {
   return (
@@ -22,6 +23,15 @@ export function SiteFooter() {
           >
             <MailIcon />
             {EMAIL}
+          </a>
+          <a
+            href={LINKEDIN}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 rounded-sm hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+          >
+            <LinkedInIcon />
+            linkedin.com/in/donna-sembrano
           </a>
         </div>
       </Container>
@@ -65,6 +75,14 @@ function MailIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+function LinkedInIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5.001 2.5 2.5 0 0 1 0-5.001ZM3 9.5h4v11H3v-11Zm6.5 0h3.84v1.5h.05c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.78 2.65 4.78 6.1v6.46h-4v-5.73c0-1.37-.03-3.12-1.91-3.12-1.92 0-2.21 1.5-2.21 3.02v5.83h-4v-11Z" />
     </svg>
   );
 }
