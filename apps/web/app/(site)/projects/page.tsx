@@ -15,11 +15,7 @@ export default async function ProjectsPage() {
 
   return (
     <Container className="py-16">
-      <h1 className="mb-2 text-3xl font-semibold tracking-tight">Projects</h1>
-      <p className="mb-10 max-w-xl text-foreground/70">
-        Case studies from this site and past work. Each includes the problem, the approach, the
-        outcome, and a link to the source.
-      </p>
+      <h1 className="mb-10 text-3xl font-bold tracking-tight">Projects</h1>
 
       {projects.length === 0 ? (
         <p className="text-foreground/60">No published projects yet — check back soon.</p>

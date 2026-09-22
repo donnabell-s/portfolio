@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import { authRouter } from './routes/auth.js';
 import { publicProjectsRouter, adminProjectsRouter } from './routes/projects.js';
 import { publicContactRouter, adminMessagesRouter } from './routes/contact.js';
+import { publicGalleryRouter, adminGalleryRouter } from './routes/gallery.js';
 
 export function createApp() {
   const app = express();
@@ -42,6 +43,8 @@ export function createApp() {
   app.use('/admin/projects', adminProjectsRouter);
   app.use('/contact', publicContactRouter);
   app.use('/admin/messages', adminMessagesRouter);
+  app.use('/gallery', publicGalleryRouter);
+  app.use('/admin/gallery', adminGalleryRouter);
 
   app.use((_req, res) => {
     res.status(404).json({ error: 'Not found' });

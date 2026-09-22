@@ -8,9 +8,7 @@ type FormState = {
   title: string;
   summary: string;
   role: string;
-  problem: string;
-  approach: string;
-  outcome: string;
+  description: string;
   techStackText: string;
   year: string;
   repoUrl: string;
@@ -28,9 +26,7 @@ function toFormState(project?: Project): FormState {
     title: project?.title ?? '',
     summary: project?.summary ?? '',
     role: project?.role ?? '',
-    problem: project?.problem ?? '',
-    approach: project?.approach ?? '',
-    outcome: project?.outcome ?? '',
+    description: project?.description ?? '',
     techStackText: project?.techStack.join(', ') ?? '',
     year: String(project?.year ?? new Date().getFullYear()),
     repoUrl: project?.repoUrl ?? '',
@@ -88,9 +84,7 @@ export function ProjectForm({
       title: form.title.trim(),
       summary: form.summary.trim(),
       role: form.role.trim(),
-      problem: form.problem.trim(),
-      approach: form.approach.trim(),
-      outcome: form.outcome.trim(),
+      description: form.description.trim(),
       techStack: form.techStackText
         .split(',')
         .map((t) => t.trim())
@@ -141,9 +135,13 @@ export function ProjectForm({
       />
       <TextField label="Role" value={form.role} onChange={(v) => set('role', v)} error={errors.role} />
 
-      <TextArea label="Problem" value={form.problem} onChange={(v) => set('problem', v)} error={errors.problem} />
-      <TextArea label="Approach" value={form.approach} onChange={(v) => set('approach', v)} error={errors.approach} />
-      <TextArea label="Outcome" value={form.outcome} onChange={(v) => set('outcome', v)} error={errors.outcome} />
+      <TextArea
+        label="Description"
+        value={form.description}
+        onChange={(v) => set('description', v)}
+        error={errors.description}
+        rows={8}
+      />
 
       <TextField
         label="Tech stack (comma-separated)"

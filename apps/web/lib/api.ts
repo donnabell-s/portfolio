@@ -1,4 +1,4 @@
-import type { Project, ContactMessage, Me } from '@portfolio/shared';
+import type { Project, ContactMessage, GalleryImage, Me } from '@portfolio/shared';
 
 /**
  * Base URL for server-side fetches (Server Components, Route Handlers).
@@ -61,6 +61,10 @@ export function getProjectBySlug(slug: string) {
   return serverFetch<Project>(`/projects/${slug}`, { revalidate: 60 });
 }
 
+export function getGalleryImages() {
+  return serverFetch<GalleryImage[]>('/gallery');
+}
+
 // ---------- Client-side (admin + contact) ----------
 
 export const api = {
@@ -77,14 +81,20 @@ export const api = {
     clientFetch<Project>(`/admin/projects/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   deleteProject: (id: number) => clientFetch<void>(`/admin/projects/${id}`, { method: 'DELETE' }),
 
-  contactToken: () => clientFetch<{ token: string }>('/contact/token'),
-  submitContact: (data: unknown) =>
-    clientFetch<{ ok: true }>('/contact', { method: 'POST', body: JSON.stringify(data) }),
-
   adminMessages: () => clientFetch<ContactMessage[]>('/admin/messages'),
   markMessageRead: (id: number, isRead: boolean) =>
     clientFetch<ContactMessage>(`/admin/messages/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ isRead }),
     }),
+
+  adminGallery: () => clientFetch<GalleryImage[]>('/admin/gallery'),
+  createGalleryImage: (data: unknown) =>
+    clientFetch<GalleryImage>('/admin/gallery', { method: 'POST', body: JSON.stringify(data) }),
+  updateGalleryImage: (id: number, data: unknown) =>
+    clientFetch<GalleryImage>(`/admin/gallery/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
+  deleteGalleryImage: (id: number) => clientFetch<void>(`/admin/gallery/${id}`, { method: 'DELETE' }),
 };

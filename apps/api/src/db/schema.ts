@@ -26,9 +26,7 @@ export const projects = pgTable('projects', {
   title: varchar('title', { length: 120 }).notNull(),
   summary: varchar('summary', { length: 280 }).notNull(),
   role: varchar('role', { length: 120 }).notNull(),
-  problem: text('problem').notNull(),
-  approach: text('approach').notNull(),
-  outcome: text('outcome').notNull(),
+  description: text('description').notNull(),
   techStack: text('tech_stack').array().notNull().default([]),
   year: integer('year').notNull(),
   repoUrl: text('repo_url').notNull(),
@@ -50,6 +48,14 @@ export const projectImages = pgTable('project_images', {
   alt: varchar('alt', { length: 200 }).notNull(),
   caption: varchar('caption', { length: 300 }),
   sortOrder: integer('sort_order').notNull().default(0),
+});
+
+export const galleryImages = pgTable('gallery_images', {
+  id: serial('id').primaryKey(),
+  path: text('path').notNull(),
+  title: varchar('title', { length: 150 }).notNull().default(''),
+  sortOrder: integer('sort_order').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const contactMessages = pgTable('contact_messages', {

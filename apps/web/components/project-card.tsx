@@ -9,7 +9,7 @@ export function ProjectCard({ project }: { project: Project }) {
       href={`/projects/${project.slug}`}
       className="group block overflow-hidden rounded-xl border border-black/10 transition-colors hover:border-foreground/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground dark:border-white/15"
     >
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/5 dark:bg-white/5">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/5 dark:bg-white/5">
         <Image
           src={project.coverImage}
           alt={project.title}

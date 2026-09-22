@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import argon2 from 'argon2';
 import { db } from './client.js';
-import { adminUsers, projects, projectImages } from './schema.js';
+import { adminUsers, projects, projectImages, galleryImages } from './schema.js';
 import { eq } from 'drizzle-orm';
 
 async function seedAdmin() {
@@ -44,12 +44,10 @@ async function seedSampleProjects() {
       summary:
         'A job-hunting portfolio that is itself the flagship project: a Node.js/Express API, a Next.js CMS-backed frontend, and Postgres — deployed for free.',
       role: 'Full-stack developer (solo)',
-      problem:
-        'Most portfolio sites are static galleries — nothing on them is actually verifiable as the developer\'s own working code. I wanted something a recruiter could poke at that proves real backend, auth, and deployment skill, not just a list of claims.',
-      approach:
-        'Built as an npm-workspaces monorepo: a Next.js 16 App Router frontend and a separate Express/TypeScript API, sharing one Zod schema package for validation on both sides. Auth uses argon2 + a JWT in an httpOnly cookie; Neon Postgres is queried through Drizzle ORM. Because the frontend and API deploy as two separate *.vercel.app projects (no custom domain), a browser-side cookie can\'t be shared between them — the Next.js config rewrites /api/* to the API origin so the cookie stays first-party and CORS never enters the picture. The contact form is rate-limited against the database itself (no Redis needed) and layers a honeypot field with a signed minimum-fill-time token to filter bots without a CAPTCHA.',
-      outcome:
-        'A fully working, authenticated CMS running on entirely free hosting tiers (Vercel Hobby + Neon free tier), with the admin panel you\'d be looking at right now if you logged in. Update: replace this line with real numbers once the site has been live a while (uptime, messages received, etc.).',
+      description:
+        'Most portfolio sites are static galleries — nothing on them is actually verifiable as the developer\'s own working code. I wanted something a recruiter could poke at that proves real backend, auth, and deployment skill, not just a list of claims.\n\n' +
+        'Built as an npm-workspaces monorepo: a Next.js 16 App Router frontend and a separate Express/TypeScript API, sharing one Zod schema package for validation on both sides. Auth uses argon2 + a JWT in an httpOnly cookie; Neon Postgres is queried through Drizzle ORM. Because the frontend and API deploy as two separate *.vercel.app projects (no custom domain), a browser-side cookie can\'t be shared between them — the Next.js config rewrites /api/* to the API origin so the cookie stays first-party and CORS never enters the picture.\n\n' +
+        'The result is a fully working, authenticated CMS running on entirely free hosting tiers (Vercel Hobby + Neon free tier), with the admin panel you\'d be looking at right now if you logged in.',
       techStack: ['TypeScript', 'Next.js', 'Node.js', 'Express', 'PostgreSQL', 'Drizzle ORM'],
       year: new Date().getFullYear(),
       repoUrl: 'https://github.com/donnabell-s/portfolio',
@@ -70,9 +68,31 @@ async function seedSampleProjects() {
   console.log(`Seeded case study: ${sample.slug}`);
 }
 
+/**
+ * Seeds one honest placeholder for the homepage Gallery section — reuses
+ * the existing cover placeholder rather than inventing a photo. Swap for a
+ * real image via the admin Gallery page whenever one exists.
+ */
+async function seedGallery() {
+  const existing = await db.query.galleryImages.findFirst();
+  if (existing) {
+    console.log('Gallery already has data, skipping sample seed.');
+    return;
+  }
+
+  await db.insert(galleryImages).values({
+    path: '/gallery/placeholder-1.svg',
+    title: 'Placeholder — add a real photo via the admin Gallery page',
+    sortOrder: 0,
+  });
+
+  console.log('Seeded placeholder gallery image.');
+}
+
 async function main() {
   await seedAdmin();
   await seedSampleProjects();
+  await seedGallery();
 }
 
 main()

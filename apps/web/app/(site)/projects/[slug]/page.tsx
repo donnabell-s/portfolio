@@ -94,10 +94,12 @@ export default async function ProjectDetailPage({ params }: PageProps<'/projects
           />
         </div>
 
-        <div className="grid gap-10 sm:grid-cols-3">
-          <CaseStudySection heading="Problem" body={project.problem} />
-          <CaseStudySection heading="Approach" body={project.approach} />
-          <CaseStudySection heading="Outcome" body={project.outcome} />
+        <div className="columns-1 gap-10 text-foreground/80 sm:columns-2">
+          {project.description.split(/\n{2,}/).map((paragraph, i) => (
+            <p key={i} className="mb-4 whitespace-pre-line">
+              {paragraph}
+            </p>
+          ))}
         </div>
 
         {project.images.length > 0 && (
@@ -130,16 +132,5 @@ export default async function ProjectDetailPage({ params }: PageProps<'/projects
         )}
       </Container>
     </article>
-  );
-}
-
-function CaseStudySection({ heading, body }: { heading: string; body: string }) {
-  return (
-    <div>
-      <h2 className="mb-2 text-sm font-semibold tracking-wide text-foreground/50 uppercase">
-        {heading}
-      </h2>
-      <p className="whitespace-pre-line text-foreground/80">{body}</p>
-    </div>
   );
 }

@@ -6,7 +6,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const projects = await getPublishedProjects().catch(() => []);
 
-  const staticRoutes: MetadataRoute.Sitemap = ['', '/projects', '/about', '/contact'].map(
+  const staticRoutes: MetadataRoute.Sitemap = ['', '/projects', '/about'].map(
     (path) => ({
       url: `${SITE_URL}${path}`,
       lastModified: new Date(),

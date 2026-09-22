@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Container } from '@/components/container';
+import { ProfilePortrait } from '@/components/profile-portrait';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -9,25 +10,27 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <Container className="py-16">
-      <h1 className="mb-6 text-3xl font-semibold tracking-tight">About</h1>
-      <div className="max-w-2xl space-y-4 text-foreground/80">
-        <p>
-          I'm a full-stack developer who enjoys taking a project from a blank database schema to
-          a deployed, working product. My background spans PHP, Django, and .NET, and this site
-          itself is built on a stack I wanted to get hands-on with: a Node.js/Express API and a
-          Next.js frontend.
-        </p>
-        <p>
-          Rather than faking a demo, this portfolio <em>is</em> the demo — it has a real
-          authenticated admin panel backing the project list you're browsing, a contact form with
-          server-side abuse protection, and a Postgres database, all running on free hosting
-          tiers with no ongoing cost.
-        </p>
-        <p>
-          Older projects are presented as case studies with screenshots rather than live demos,
-          since paying to keep several small apps running around the clock isn't a good trade —
-          but every one of them links to its full source on GitHub.
-        </p>
+      <div className="grid items-center gap-12 sm:grid-cols-[1.2fr_1fr]">
+        <div>
+          <h1 className="mb-6 text-3xl font-bold tracking-tight">About</h1>
+          <div className="max-w-xl space-y-4 text-foreground/80">
+            <p>
+              I&apos;m Donna Elizabeth Sembrano, a Computer Science graduate from the University
+              of San Jose-Recoletos in Cebu, majoring in Artificial Intelligence and Web
+              Development. I like building things that actually solve real problems, whether
+              that&apos;s a full-stack web app, a machine learning pipeline, or a system that
+              brings AI into everyday workflows.
+            </p>
+            <p>
+              My core stack includes Python, JavaScript/TypeScript, React, Next.js, and Django,
+              and I enjoy working across the full development process, from architecture to
+              deployment. I&apos;m someone who locks in once given a task, and I genuinely enjoy
+              the process of figuring things out, whether that&apos;s debugging a tricky issue or
+              learning a new tool on the fly.
+            </p>
+          </div>
+        </div>
+        <ProfilePortrait size={300} />
       </div>
     </Container>
   );

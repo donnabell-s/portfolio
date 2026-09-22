@@ -29,9 +29,7 @@ export const projectInputSchema = z.object({
   title: z.string().min(1, 'Title is required').max(120),
   summary: z.string().min(1, 'Summary is required').max(280),
   role: z.string().min(1).max(120),
-  problem: z.string().min(1, 'Problem is required'),
-  approach: z.string().min(1, 'Approach is required'),
-  outcome: z.string().min(1, 'Outcome is required'),
+  description: z.string().min(1, 'Description is required'),
   techStack: z.array(z.string().min(1).max(40)).min(1, 'Add at least one technology'),
   year: z
     .number()
