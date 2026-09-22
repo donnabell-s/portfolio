@@ -52,7 +52,7 @@ async function seedSampleProjects() {
         'A fully working, authenticated CMS running on entirely free hosting tiers (Vercel Hobby + Neon free tier), with the admin panel you\'d be looking at right now if you logged in. Update: replace this line with real numbers once the site has been live a while (uptime, messages received, etc.).',
       techStack: ['TypeScript', 'Next.js', 'Node.js', 'Express', 'PostgreSQL', 'Drizzle ORM'],
       year: new Date().getFullYear(),
-      repoUrl: 'https://github.com/your-username/portfolio',
+      repoUrl: 'https://github.com/donnabell-s/portfolio',
       coverImage: '/projects/this-portfolio/cover.svg',
       status: 'published',
       featured: true,
