@@ -30,7 +30,7 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
-        <ProfilePortrait size={300} />
+        <ProfilePortrait variant="hero" size={420} />
       </div>
     </Container>
   );

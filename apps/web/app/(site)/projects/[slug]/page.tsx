@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { AspectFitImage } from '@/components/aspect-fit-image';
 import { Container } from '@/components/container';
 import { TechBadge } from '@/components/tech-badge';
 import { ApiError, getProjectBySlug } from '@/lib/api';
@@ -86,16 +86,14 @@ export default async function ProjectDetailPage({ params }: PageProps<'/projects
           </div>
         </header>
 
-        <div className="relative mb-12 aspect-[16/9] w-full overflow-hidden rounded-xl bg-black/5 dark:bg-white/5">
-          <Image
-            src={project.coverImage}
-            alt={project.title}
-            fill
-            sizes="(min-width: 1024px) 768px, 100vw"
-            className="object-cover"
-            priority
-          />
-        </div>
+        <AspectFitImage
+          src={project.coverImage}
+          alt={project.title}
+          sizes="(min-width: 1024px) 720px, 100vw"
+          priority
+          defaultRatio={16 / 10}
+          className="mx-auto mb-12 max-w-3xl overflow-hidden rounded-xl"
+        />
 
         <div className="columns-1 gap-10 text-foreground/80 sm:columns-2">
           {project.description.split(/\n{2,}/).map((paragraph, i) => (
@@ -114,15 +112,12 @@ export default async function ProjectDetailPage({ params }: PageProps<'/projects
                   key={image.id}
                   className="overflow-hidden rounded-xl border border-black/10 dark:border-white/15"
                 >
-                  <div className="relative aspect-video w-full bg-black/5 dark:bg-white/5">
-                    <Image
-                      src={image.path}
-                      alt={image.alt}
-                      fill
-                      sizes="(min-width: 640px) 50vw, 100vw"
-                      className="object-cover"
-                    />
-                  </div>
+                  <AspectFitImage
+                    src={image.path}
+                    alt={image.alt}
+                    sizes="(min-width: 640px) 50vw, 100vw"
+                    defaultRatio={16 / 9}
+                  />
                   {image.caption && (
                     <figcaption className="p-3 text-sm text-foreground/60">
                       {image.caption}

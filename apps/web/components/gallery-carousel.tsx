@@ -1,103 +1,136 @@
 'use client';
 
-import { useLayoutEffect, useRef, useState, type UIEvent } from 'react';
+import { useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import Image from 'next/image';
 import type { GalleryImage } from '@portfolio/shared';
 
 export function GalleryCarousel({ images }: { images: GalleryImage[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [active, setActive] = useState(0);
-
   const loop = images.length > 1;
-  // With looping enabled, a clone of the last slide is prepended and a
-  // clone of the first slide is appended, so scrolling past either end
-  // lands on a lookalike slide that we silently snap back from — the
-  // classic infinite-carousel trick, giving a track that never dead-ends.
+  // A clone of the last slide is prepended and a clone of the first slide is
+  // appended, so the track can keep animating past either end. Once the
+  // animation lands on a clone, we silently jump (no transition) to the
+  // matching real slide — the standard infinite-carousel technique, but
+  // driven by transform + transitionend instead of native scroll-snap,
+  // which was prone to getting stuck mid-gesture.
   const slides = loop ? [images[images.length - 1], ...images, images[0]] : images;
 
-  function slideStep() {
-    const track = trackRef.current;
-    return ((track?.firstElementChild as HTMLElement | null)?.offsetWidth ?? 0) + 16;
-  }
+  const [pos, setPos] = useState(loop ? 1 : 0);
+  const [animate, setAnimate] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [dragX, setDragX] = useState(0);
+  const dragStartX = useRef<number | null>(null);
+  const dragging = useRef(false);
 
-  function scrollToExtendedIndex(index: number, smooth: boolean) {
-    trackRef.current?.scrollTo({ left: index * slideStep(), behavior: smooth ? 'smooth' : 'auto' });
+  const active = !loop ? pos : pos === 0 ? images.length - 1 : pos === slides.length - 1 ? 0 : pos - 1;
+
+  function offsetOf(index: number) {
+    const el = trackRef.current?.children[index] as HTMLElement | null;
+    return el ? el.offsetLeft : 0;
   }
 
   useLayoutEffect(() => {
-    if (loop) scrollToExtendedIndex(1, false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loop]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- measuring real DOM layout after (re)render, not mirroring external state
+    setOffset(offsetOf(pos));
+  }, [pos, images.length]);
 
-  function goTo(index: number) {
-    setActive(index);
-    scrollToExtendedIndex(loop ? index + 1 : index, true);
+  useLayoutEffect(() => {
+    function handleResize() {
+      setOffset(offsetOf(pos));
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [pos]);
+
+  function moveTo(index: number, withAnimation: boolean) {
+    setAnimate(withAnimation);
+    setPos(index);
+  }
+
+  function goTo(imageIndex: number) {
+    moveTo(loop ? imageIndex + 1 : imageIndex, true);
   }
 
   function next() {
-    if (!loop) return goTo(Math.min(active + 1, images.length - 1));
-    scrollToExtendedIndex(active + 2, true);
+    moveTo(Math.min(pos + 1, slides.length - 1), true);
   }
 
   function prev() {
-    if (!loop) return goTo(Math.max(active - 1, 0));
-    scrollToExtendedIndex(active, true);
+    moveTo(Math.max(pos - 1, 0), true);
   }
 
-  function handleScroll(e: UIEvent<HTMLDivElement>) {
-    const track = e.currentTarget;
-    const step = slideStep();
-    const rawIndex = Math.round(track.scrollLeft / step);
+  function handleTransitionEnd() {
+    if (!loop) return;
+    if (pos === 0) moveTo(slides.length - 2, false);
+    else if (pos === slides.length - 1) moveTo(1, false);
+  }
 
-    if (settleTimer.current) clearTimeout(settleTimer.current);
-    settleTimer.current = setTimeout(() => {
-      if (!loop) {
-        setActive(Math.min(Math.max(rawIndex, 0), images.length - 1));
-        return;
-      }
-      if (rawIndex <= 0) {
-        scrollToExtendedIndex(images.length, false);
-        setActive(images.length - 1);
-      } else if (rawIndex >= slides.length - 1) {
-        scrollToExtendedIndex(1, false);
-        setActive(0);
-      } else {
-        setActive(rawIndex - 1);
-      }
-    }, 120);
+  function handlePointerDown(e: ReactPointerEvent<HTMLDivElement>) {
+    if (slides.length <= 1) return;
+    dragging.current = true;
+    dragStartX.current = e.clientX;
+    setAnimate(false);
+    trackRef.current?.setPointerCapture(e.pointerId);
+  }
+
+  function handlePointerMove(e: ReactPointerEvent<HTMLDivElement>) {
+    if (!dragging.current || dragStartX.current === null) return;
+    setDragX(e.clientX - dragStartX.current);
+  }
+
+  function endDrag() {
+    if (!dragging.current) return;
+    dragging.current = false;
+    dragStartX.current = null;
+    const threshold = 50;
+    const delta = dragX;
+    setDragX(0);
+    if (delta <= -threshold) next();
+    else if (delta >= threshold) prev();
+    else setAnimate(true);
   }
 
   if (images.length === 0) return null;
 
+  const x = -offset + dragX;
+
   return (
     <div>
-      <div
-        ref={trackRef}
-        onScroll={handleScroll}
-        className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-2"
-        style={{ scrollbarWidth: 'none' }}
-      >
-        {slides.map((image, i) => (
-          <figure
-            key={`${image.id}-${i}`}
-            className="relative aspect-[4/3] w-[85%] shrink-0 snap-start overflow-hidden rounded-xl bg-black/5 sm:w-[45%] dark:bg-white/5"
-          >
-            <Image
-              src={image.path}
-              alt={image.title || 'Gallery photo'}
-              fill
-              sizes="(min-width: 640px) 45vw, 85vw"
-              className="object-cover"
-              priority={i === 0}
-            />
-            {image.title && (
-              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-sm font-medium text-white">
-                {image.title}
-              </figcaption>
-            )}
-          </figure>
-        ))}
+      <div className="overflow-hidden">
+        <div
+          ref={trackRef}
+          onTransitionEnd={handleTransitionEnd}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          className={`flex gap-4 ${animate ? 'transition-transform duration-300 ease-out' : ''} ${
+            slides.length > 1 ? 'cursor-grab active:cursor-grabbing' : ''
+          }`}
+          style={{ transform: `translateX(${x}px)`, touchAction: 'pan-y' }}
+        >
+          {slides.map((image, i) => (
+            <figure
+              key={`${image.id}-${i}`}
+              className="relative aspect-[4/3] w-[85%] shrink-0 select-none overflow-hidden rounded-xl bg-black/5 sm:w-[45%] dark:bg-white/5"
+            >
+              <Image
+                src={image.path}
+                alt={image.title || 'Gallery photo'}
+                fill
+                sizes="(min-width: 640px) 45vw, 85vw"
+                className="object-cover"
+                priority={i === 0}
+                draggable={false}
+              />
+              {image.title && (
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-sm font-medium text-white">
+                  {image.title}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
       </div>
 
       {images.length > 1 && (
@@ -106,7 +139,7 @@ export function GalleryCarousel({ images }: { images: GalleryImage[] }) {
             type="button"
             aria-label="Previous image"
             onClick={prev}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-black/15 text-sm dark:border-white/20"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-black/15 text-sm transition-colors hover:border-foreground/40 dark:border-white/20"
           >
             &lsaquo;
           </button>
@@ -128,7 +161,7 @@ export function GalleryCarousel({ images }: { images: GalleryImage[] }) {
             type="button"
             aria-label="Next image"
             onClick={next}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-black/15 text-sm dark:border-white/20"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-black/15 text-sm transition-colors hover:border-foreground/40 dark:border-white/20"
           >
             &rsaquo;
           </button>
