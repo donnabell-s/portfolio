@@ -27,7 +27,7 @@ function LoginForm() {
     setError(null);
     try {
       await api.login(email, password);
-      const from = searchParams.get('from') ?? '/admin';
+      const from = searchParams.get('from') ?? '/admin/projects';
       router.replace(from);
       router.refresh();
     } catch (err) {
@@ -42,7 +42,7 @@ function LoginForm() {
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5">
         <div>
           <h1 className="text-xl font-semibold">Admin sign in</h1>
-          <p className="mt-1 text-sm text-foreground/60">Manage projects and messages.</p>
+          <p className="mt-1 text-sm text-foreground/60">Manage projects and gallery.</p>
         </div>
 
         <div>

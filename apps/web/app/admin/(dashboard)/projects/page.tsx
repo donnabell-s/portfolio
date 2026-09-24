@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { api, ApiError } from '@/lib/api';
+import { useDragReorder } from '@/lib/use-drag-reorder';
+import { GripIcon } from '@/components/admin/grip-icon';
 import type { Project } from '@portfolio/shared';
 
 export default function AdminProjectsPage() {
@@ -28,10 +30,27 @@ export default function AdminProjectsPage() {
     }
   }
 
+  const { dragIndex, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragReorder(
+    projects,
+    setProjects,
+    (id, sortOrder) =>
+      api
+        .updateProject(id, { sortOrder })
+        .catch((err) => setError(err instanceof ApiError ? err.message : 'Failed to save order')),
+  );
+
+  const published = projects?.filter((p) => p.status === 'published').length ?? 0;
+  const drafts = projects?.filter((p) => p.status === 'draft').length ?? 0;
+
   return (
     <div>
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Projects</h1>
+        <div>
+          <h1 className="text-2xl font-semibold">Projects</h1>
+          <p className="mt-1 text-sm text-foreground/60">
+            Published: {published} &middot; Draft: {drafts}
+          </p>
+        </div>
         <Link
           href="/admin/projects/new"
           className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background hover:opacity-90"
@@ -48,9 +67,22 @@ export default function AdminProjectsPage() {
         <p className="text-sm text-foreground/60">No projects yet.</p>
       ) : (
         <ul className="divide-y divide-black/10 rounded-xl border border-black/10 dark:divide-white/10 dark:border-white/15">
-          {projects.map((project) => (
-            <li key={project.id} className="flex items-center justify-between gap-4 p-4">
-              <div className="min-w-0">
+          {projects.map((project, i) => (
+            <li
+              key={project.id}
+              draggable
+              onDragStart={handleDragStart(i)}
+              onDragOver={handleDragOver(i)}
+              onDrop={handleDrop}
+              onDragEnd={handleDragEnd}
+              className={`flex items-center justify-between gap-4 p-4 ${
+                dragIndex === i ? 'opacity-50' : ''
+              }`}
+            >
+              <span data-drag-handle className="cursor-grab touch-none text-foreground/40 active:cursor-grabbing">
+                <GripIcon />
+              </span>
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <p className="truncate font-medium">{project.title}</p>
                   <span

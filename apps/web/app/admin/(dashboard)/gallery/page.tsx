@@ -2,6 +2,8 @@
 
 import { useEffect, useState, type FormEvent } from 'react';
 import { api, ApiError } from '@/lib/api';
+import { useDragReorder } from '@/lib/use-drag-reorder';
+import { GripIcon } from '@/components/admin/grip-icon';
 import type { GalleryImage } from '@portfolio/shared';
 
 export default function AdminGalleryPage() {
@@ -62,6 +64,15 @@ export default function AdminGalleryPage() {
     }
   }
 
+  const { dragIndex, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragReorder(
+    images,
+    setImages,
+    (id, sortOrder) =>
+      api
+        .updateGalleryImage(id, { sortOrder })
+        .catch((err) => setError(err instanceof ApiError ? err.message : 'Failed to save order')),
+  );
+
   return (
     <div>
       <h1 className="mb-8 text-2xl font-semibold">Gallery</h1>
@@ -113,8 +124,21 @@ export default function AdminGalleryPage() {
         </p>
       ) : (
         <ul className="divide-y divide-black/10 rounded-xl border border-black/10 dark:divide-white/10 dark:border-white/15">
-          {images.map((image) => (
-            <li key={image.id} className="flex flex-wrap items-center gap-4 p-4">
+          {images.map((image, i) => (
+            <li
+              key={image.id}
+              draggable
+              onDragStart={handleDragStart(i)}
+              onDragOver={handleDragOver(i)}
+              onDrop={handleDrop}
+              onDragEnd={handleDragEnd}
+              className={`flex flex-wrap items-center gap-4 p-4 ${
+                dragIndex === i ? 'opacity-50' : ''
+              }`}
+            >
+              <span data-drag-handle className="cursor-grab touch-none text-foreground/40 active:cursor-grabbing">
+                <GripIcon />
+              </span>
               <span className="w-full truncate text-sm text-foreground/60 sm:w-56">
                 {image.path}
               </span>

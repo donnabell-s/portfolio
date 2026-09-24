@@ -1,4 +1,4 @@
-import type { Project, ContactMessage, GalleryImage, Me } from '@portfolio/shared';
+import type { Project, GalleryImage, Me } from '@portfolio/shared';
 
 /**
  * Base URL for server-side fetches (Server Components, Route Handlers).
@@ -80,13 +80,6 @@ export const api = {
   updateProject: (id: number, data: unknown) =>
     clientFetch<Project>(`/admin/projects/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   deleteProject: (id: number) => clientFetch<void>(`/admin/projects/${id}`, { method: 'DELETE' }),
-
-  adminMessages: () => clientFetch<ContactMessage[]>('/admin/messages'),
-  markMessageRead: (id: number, isRead: boolean) =>
-    clientFetch<ContactMessage>(`/admin/messages/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ isRead }),
-    }),
 
   adminGallery: () => clientFetch<GalleryImage[]>('/admin/gallery'),
   createGalleryImage: (data: unknown) =>
